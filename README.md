@@ -4,7 +4,7 @@
 
 ## We will soon have easily modifiable Psychopy code to allow you to run your experiment, and Matlab code to allow you to analyse your data. 
 
-## Please bear with us while we finalise this toolbox, in the meantime if you have any questions about the Fastball toolbox please email George Stothart at the Unviersity of Bath, G.Stothart@bath.ac.uk
+## Please bear with us while we finalise this toolbox, in the meantime if you have any questions about the Fastball toolbox please email George Stothart at the University of Bath, G.Stothart@bath.ac.uk
 
 
 
