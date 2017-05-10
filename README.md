@@ -1,3 +1,11 @@
+## Welcome to the Fastbool toolbox
+
+## Fastball is a new method that uses frequency tagging to measure oddball responses in EEG data.
+
+## The technique will allow you to measure MMN in single subjects in minutes
+
+
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/gstothart/fastball/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
