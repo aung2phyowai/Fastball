@@ -93,24 +93,54 @@ in this location",None,None,None
 ##a function that takes randomisation parameters and creates script files for
 ##each participant
 #this should also take some parameters relating to the randomisation?
-def stimallocation(ppts,cycles,ratio,standards,deviants):
+def stimallocation(ppts,cycles,ratio,standards,deviants,randtype):
     fullrandomisation=[]
 #define empty list to put participant scripts in
-    for p in range(int(ppts)):
+
+#randomise with replacement
+    if randtype=="with replacement":
+        for p in range(int(ppts)):
 #make a list of cycles for each participant        
-        thisscript=[]
-        for c in range(int(cycles)):
-            thiscycle=[]
-            for s in range(int(ratio)):
+            thisscript=[]
+            for c in range(int(cycles)):
+                thiscycle=[]
+                for s in range(int(ratio)):
 #for each cycle, randomly choose the requisite number of standards, 
 #plus one deviant
-                thiscycle.append(random.choice(standards))
-            thiscycle.append(random.choice(deviants))
-            thisscript.append(thiscycle)
+                    thiscycle.append(random.choice(standards))
+                thiscycle.append(random.choice(deviants))
+                thisscript.append(thiscycle)
 #add the cycle to the list for this participant
-        fullrandomisation.append(thisscript)
+            fullrandomisation.append(thisscript)
 #when finished with a participant, add their list to the main list of scripts
+
+    else:
+#randomisation without replacement
+        storig=list(standards)
+        devorig=list(deviants)
+        for p in range(int(ppts)):
+            standards=list(storig)
+            deviants=list(devorig)
+            thisscript=[]
+            for c in range(int(cycles)):
+                thiscycle=[]
+                for s in range(int(ratio)):
+                    if len(standards)==0:
+                        standards=list(storig)
+                    selection=random.choice(range(len(standards)))
+                    thiscycle.append(standards[selection])
+                    standards.pop(selection)
+                if len(deviants)==0:
+                    deviants=list(devorig)
+                selection=random.choice(range(len(deviants)))
+                thiscycle.append(deviants[selection])
+                deviants.pop(selection)
+                thisscript.append(thiscycle)
+            fullrandomisation.append(thisscript)  
+
+
     return fullrandomisation
+
 
 
 ##a function to turn a list of stimulus allocations into saved files    
@@ -120,7 +150,7 @@ def savepptfiles(name,randomisation,cycles,ratio,frames,standdir,devdir,savedir)
 #step through each participant's list of cycles in the randomisation list
     for ppt in randomisation:
 #create an appropriate filename for that participant's script file
-        filename=name+"_participant_"+str(pptno)+".csv"#savedir+"/"+name+"_participant_"+str(pptno)+".csv"
+        filename=name+"_participant_"+str(pptno)+".csv"
 #write some appropriate headers to the file
         with open(filename,"w") as scriptinput:
             scriptinput.write("SCRIPT INPUT CREATED,"\
@@ -139,11 +169,14 @@ def savepptfiles(name,randomisation,cycles,ratio,frames,standdir,devdir,savedir)
                 with open(filename,"a") as scriptinput:
                     scriptinput.write(",".join(cycle)+"\n")
         pptno=pptno+1
+        
+#add a folder for logfiles
+    os.mkdir("Logfiles")
             
     
 ##a function that checks for a viable set of parameters and then uses them
 ##to run the randomisation and create participant files for the experiment        
-def createExperiment(name,ppts,cycles,ratio,frames,standdir,devdir,exploc):
+def createExperiment(name,ppts,cycles,ratio,frames,standdir,devdir,exploc,randtype):
 #check whether the parameters are acceptable
     accepted,message,savedir,standards,deviants=acceptParams(name,ppts,cycles,\
 ratio,frames,standdir,devdir,exploc)           
@@ -152,7 +185,7 @@ ratio,frames,standdir,devdir,exploc)
         errorbox(message)    
     else:    
 #otherwise, apply the randomisation to allocate stimuli
-        fullrandomisation = stimallocation(ppts,cycles,ratio,standards,deviants)
+        fullrandomisation = stimallocation(ppts,cycles,ratio,standards,deviants,randtype)
 #and generate corresponding files to save them to the specified folder
         savepptfiles(name,fullrandomisation,cycles,ratio,frames,standdir,\
 devdir,savedir)
@@ -202,8 +235,24 @@ standards per deviant",4,"5")
 Standard images",6,"")
         self.devloclabel, self.devlocentry = addfield(self,"Location of \
 Deviant images",7,"")
+
+#add label + entry for dropdown menu
+        self.randtype= StringVar(root)
+        self.randtype.set("with replacement")
+    
         self.exploclabel, self.explocentry = addfield(self,"Location to \
 save experiment",8,"")
+        self.randtypelabel = Label(self, text="Randomise stimuli:", anchor="e", width="30")
+        self.randtypelabel.padx=20
+        self.randtypelabel.pady=20
+        self.randtypelabel.grid(row=9,column=0)
+        self.randtypeentry = Label(self, text="",anchor="w",width=50)
+        self.randtypeentry.padx=20
+        self.randtypeentry.pady=20
+        self.randtypeentry.grid(row=9,column=1)
+        
+        def change_dropdown(*args):
+            return(self.randtype.get())
 
 #add some Browse buttons that allow participants to browse for 
 #directory locations        
@@ -222,6 +271,14 @@ save experiment",8,"")
         self.exploc["command"] = lambda: filebrowser(self.explocentry)
         self.exploc.grid(row=8,column=2)
         
+###add a dropdown for randomisation type
+        self.randmenu = OptionMenu(self, self.randtype, *{"with replacement","without replacement"})
+        self.randmenu.padx=20
+        self.randmenu.pady=20
+        self.randmenu.grid(row=9,column=1)
+        
+        self.randtype.trace("w",change_dropdown)
+        
 #add a quit button 
         self.QUIT=Button(self)
         self.QUIT["text"] = "QUIT"
@@ -237,7 +294,8 @@ save experiment",8,"")
         self.CREATE["command"] = lambda: createExperiment(\
 self.expnameentry.get(),self.ppentry.get(),self.cyclesentry.get(),\
 self.ratiosentry.get(),self.framesentry.get(),\
-self.stlocentry.get(),self.devlocentry.get(),self.explocentry.get())
+self.stlocentry.get(),self.devlocentry.get(),self.explocentry.get(),\
+self.randtype.get())
         self.CREATE.padx=20
         self.CREATE.pady=20
         self.CREATE.grid(row=9,column=3)       
