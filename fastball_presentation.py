@@ -61,7 +61,7 @@ def checkparams(script):
     try:
         #split the script into three parts according to expected double 
         #line breaks
-        parts=script.split("\n\n")
+        parts=script.split(2*os.linesep)
         headers=parts[2]
         stimscheduletext=parts[3]
     except IndexError:
@@ -298,6 +298,10 @@ color=[1,1,1])
 
 #stop the mouse appearing in the experiment window (Doesn't seem to be working?)
 fastballwin.setMouseVisible(False)
+
+#stop the mouse appearing in the experiment windew
+m=event.Mouse(win=fastballwin)
+m.setVisible(False)
 
 for cycle in stimlist:
     for s in cycle:
