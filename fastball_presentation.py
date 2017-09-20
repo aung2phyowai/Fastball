@@ -55,13 +55,16 @@ def checkscript(scriptfile):
 
 #function that makes sure all parts of the script are present
 def checkparams(script):
+    #remove windows line ending characters
+    while "\r\n" in script:
+        script=script.replace("\r\n","\n")
     #remove end-of-line commas that may be present        
     while ",\n" in script:
         script=script.replace(",\n","\n")
     try:
         #split the script into three parts according to expected double 
         #line breaks
-        parts=script.split(2*os.linesep)
+        parts=script.split("\n\n")
         headers=parts[2]
         stimscheduletext=parts[3]
     except IndexError:
@@ -88,10 +91,12 @@ def checkparams(script):
         raise ValueError
         
 #check for logfile already existing
+    print exparams["scriptfilelocation"]
+    print "literally anything"
     os.chdir(exparams["scriptfilelocation"])
     try: 
         os.chdir("Logfiles")
-        if os.path.isfile(exparams["scriptfilename"]):
+        if os.path.isfile(exparams["exp"]+"_ppt_"+exparams["ppt"]+"_logfile.csv"):
             raise Exception("A logfile already exists for this participant")
     except OSError: #no Logfiles directory there
         pass        
@@ -257,10 +262,9 @@ currentlocation.withdraw()
 scriptlocation=os.getcwd()
 
 #create a window to pre-check stimuli
-prepwin = visual.Window(fullscr=True, monitor="testmonitor",size=[800,600],\
+prepwin = visual.Window(fullscr=False, monitor="testmonitor",size=[800,600],\
  units="pix", color =[1,1,1]) 
 
-prepwin.setMouseVisible(False)
 
 
 
@@ -280,6 +284,7 @@ while not loadingok:
         else:
             #OK was pressed; process the input
             exparams["scriptfilelocation"]=os.path.dirname(exparams["scriptfilename"])
+            #print "here is the location " + os.path.dirname(exparams["scriptfilename"])
             loadingok, stimlist, stimschedule = acceptscript(exparams["scriptfilename"])
             
 
