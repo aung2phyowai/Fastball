@@ -230,7 +230,7 @@ stimulus files are of an accepted type.")
 
 #function to present text on the screen until space bar is pressed    
 def showtext(string,window):
-    screentext=visual.TextStim(win=window, color='black', height=10.5, \
+    screentext=visual.TextStim(win=window, color='black', height=1.5, \
 text=string, alignHoriz='center')
     #put the text on the screen
     screentext.draw()
@@ -263,7 +263,7 @@ scriptlocation=os.getcwd()
 
 #create a window to pre-check stimuli
 prepwin = visual.Window(fullscr=False, monitor="testmonitor",size=[800,600],\
- units="pix", color =[1,1,1]) 
+ units="deg", color =[1,1,1]) 
 
 
 
@@ -297,7 +297,7 @@ while not loadingok:
 
     
 #start a new window here because otherwise it won't have focus
-fastballwin=visual.Window(fullscr=True,monitor="testmonitor",units="pix",\
+fastballwin=visual.Window(fullscr=False,monitor="surface",units="deg",\
 color=[1,1,1])
 
 
@@ -324,13 +324,18 @@ core.wait(1)
 #start logging frame durations
 fastballwin.setRecordFrameIntervals(True)
 
+ISI = visual.PatchStim(fastballwin, mask='gauss', sf=0, size=0.02, name='ISI')#GS added
 
 #present the stimuli
 
 for cycle in stimlist:
     for s in cycle:
+        s.size=(5,5)#GS added
         for frameN in range(exparams["n_frames"]):
             s.draw()
+            fastballwin.flip()
+        for frameN in range(exparams["n_frames"]):#GS added
+            ISI.draw()
             fastballwin.flip()
        
 fastballwin.flip()
