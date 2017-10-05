@@ -91,8 +91,6 @@ def checkparams(script):
         raise ValueError
         
 #check for logfile already existing
-    print exparams["scriptfilelocation"]
-    print "literally anything"
     os.chdir(exparams["scriptfilelocation"])
     try: 
         os.chdir("Logfiles")
@@ -152,10 +150,11 @@ def createframelist(templog):
             frames.append(float(f))
     prestimes=[]
     #for each image, collect the frames relating to it and sum their duration
+    #ignore an ISI of the same number of frames after every image
     for img in range(n_images): 
         time=0 
         for frame in range(exparams["n_frames"]):
-            time=time+float(frames[img*exparams["n_frames"]+frame])
+            time=time+float(frames[(img*exparams["n_frames"]+frame)*2])
         #add the total time for that image to the lists of presentation times
         prestimes.append(time)
     return prestimes
@@ -238,7 +237,7 @@ text=string, alignHoriz='center')
     #wait to prevent accidental presses
     core.wait(3) 
     
-    #wait for response *** WINDOW DOES NOT HAVE FOCUS HERE?? NOT COLLECTING EVENTS
+    #wait for response
     responsegiven=False
     while not responsegiven:
         for key in event.getKeys():
@@ -263,7 +262,7 @@ scriptlocation=os.getcwd()
 
 #create a window to pre-check stimuli
 prepwin = visual.Window(fullscr=False, monitor="testmonitor",size=[800,600],\
- units="deg", color =[1,1,1]) 
+units="pix", color =[1,1,1]) 
 
 
 
@@ -284,7 +283,6 @@ while not loadingok:
         else:
             #OK was pressed; process the input
             exparams["scriptfilelocation"]=os.path.dirname(exparams["scriptfilename"])
-            #print "here is the location " + os.path.dirname(exparams["scriptfilename"])
             loadingok, stimlist, stimschedule = acceptscript(exparams["scriptfilename"])
             
 
@@ -297,11 +295,14 @@ while not loadingok:
 
     
 #start a new window here because otherwise it won't have focus
-fastballwin=visual.Window(fullscr=False,monitor="surface",units="deg",\
+fastballwin=visual.Window(fullscr=True,monitor="surface",units="deg",\
 color=[1,1,1])
 
+#window includes ISI image
+ISI = visual.PatchStim(fastballwin, mask='gauss', sf=0, size=0.02, name='ISI')#GS added
 
-#stop the mouse appearing in the experiment window (Doesn't seem to be working?)
+
+#stop the mouse appearing in the experiment window
 fastballwin.setMouseVisible(False)
 
 #stop the mouse appearing in the experiment windew
@@ -310,6 +311,7 @@ m.setVisible(False)
 
 for cycle in stimlist:
     for s in cycle:
+        s.size=(5,5)#GS added
         s.win=fastballwin
 
 #show initial instructions
@@ -324,13 +326,10 @@ core.wait(1)
 #start logging frame durations
 fastballwin.setRecordFrameIntervals(True)
 
-ISI = visual.PatchStim(fastballwin, mask='gauss', sf=0, size=0.02, name='ISI')#GS added
-
 #present the stimuli
 
 for cycle in stimlist:
     for s in cycle:
-        s.size=(5,5)#GS added
         for frameN in range(exparams["n_frames"]):
             s.draw()
             fastballwin.flip()
@@ -341,7 +340,6 @@ for cycle in stimlist:
 fastballwin.flip()
 #save the recorded frame durations in a temporary log
 fastballwin.saveFrameIntervals("tempframelog.csv",clear=True)
-
 
 #log the presented image and duration info
 presentedtimes=createframelist("tempframelog.csv")
