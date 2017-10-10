@@ -6,7 +6,7 @@ http://www.sciencedirect.com/science/article/pii/S0028393217302002
 
 ## The toolbox contains Psychopy code to create and run your experiment, and Matlab code to analyse your data. 
 
-## Please go to the <wiki> (https://github.com/gstothart/Fastball/wiki) where you will find all the instructions you will need
+## Please go to the (wiki)<https://github.com/gstothart/Fastball/wiki> where you will find all the instructions you will need
 
 ## If you have any questions please email George Stothart at the University of Bath, G.Stothart@bath.ac.uk
 
