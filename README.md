@@ -6,7 +6,7 @@
 
 ## To get started please click <a href="https://github.com/gstothart/Fastball/wiki">here</a> to go to the wiki where you will find all the instructions you will need.
 
-## If you have any questions please email George Stothart at the University of Bath, <a href="G.Stothart@bath.ac.uk">email</a>
+## If you have any questions please email <a href="mailto:G.Stothart@bath.ac.uk">George Stothart</a> at the University of Bath. 
 
 ## This toolbox was developed by
 
