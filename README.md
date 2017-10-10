@@ -10,7 +10,7 @@
 
 ## This toolbox was developed by
 
-## George Stothart <a "http://www.bath.ac.uk/psychology/staff/george-stothart/index.html">web</a> <a "https://twitter.com/GStothart">twitter</a>
+## George Stothart <a href="http://www.bath.ac.uk/psychology/staff/george-stothart/index.html">web</a> <a href= "https://twitter.com/GStothart">twitter</a>
 ## Emily Darley http://www.bris.ac.uk/expsych/people/emily-j-darley/index.html
 ## Alex Milton https://www.southampton.ac.uk/psychology/about/staff/amm1a15.page
 
