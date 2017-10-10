@@ -6,11 +6,16 @@ http://www.sciencedirect.com/science/article/pii/S0028393217302002
 
 ## The toolbox contains Psychopy code to create and run your experiment, and Matlab code to analyse your data. 
 
-## Please go to the (wiki)<https://github.com/gstothart/Fastball/wiki> where you will find all the instructions you will need
+## To get started please go to the wiki, <https://github.com/gstothart/Fastball/wiki> where you will find all the instructions you will need.
 
 ## If you have any questions please email George Stothart at the University of Bath, G.Stothart@bath.ac.uk
 
-https://github.com/gstothart/Fastball.git
+## This toolbox was developed by
+
+## George Stothart http://www.bath.ac.uk/psychology/staff/george-stothart/index.html
+## Emily Darley http://www.bris.ac.uk/expsych/people/emily-j-darley/index.html
+## Alex Milton https://www.southampton.ac.uk/psychology/about/staff/amm1a15.page
+
 
 
 
