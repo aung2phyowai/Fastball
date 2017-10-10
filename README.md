@@ -8,6 +8,7 @@ http://www.sciencedirect.com/science/article/pii/S0028393217302002
 
 ## If you would like to receive an email to let you know when the toolbox is ready to use, or have any questions please email George Stothart at the University of Bath, G.Stothart@bath.ac.uk
 
+https://github.com/gstothart/Fastball.git
 
 
 
